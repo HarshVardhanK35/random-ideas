@@ -1,1 +1,30 @@
--------------------- Backend -> REST API
+-------------------- Backend -> REST API --------------------
+
+--------------------------------- PART-01 ---------------------------------
+1. Here we are just creating the Backend-API
+    -> Which are routes that we can make HTTP requests to get ideas
+    -> in addition to get we can create, read, update and delete ideas
+
+Steps to be followed:
+--------------------
+-> Initialize a package.json --- "npm init"
+(package name: randomideas; description: Ideas sharing app; entry point: server.js)
+
+-> "npm i express" (not as dev-dependency)
+(if the npm is the older version... update it with "npm i -g npm@`latest-version")
+
+-> create a file --- server.js
+(create a server )
+
+-> to start the server(run the file server.js)
+    --- change the test scripts inside package.json to "start": "node server.js"
+    --- open the terminal and run the command... "npm start".
+    --- use postman to make "GET"- request.
+
+--------------------------------- PART-02 ---------------------------------
+
+intro:
+------
+-> every time we are restarting the server if there are any modifications.
+-> Installing nodemon and which continuously watches over the changes and restarts the server.
+
