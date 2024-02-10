@@ -21,10 +21,56 @@ Steps to be followed:
     --- open the terminal and run the command... "npm start".
     --- use postman to make "GET"- request.
 
---------------------------------- PART-02 ---------------------------------
-
+--------------------------------- PART-02 -> nodemon & route-cleanup ---------------------------------
 intro:
 ------
 -> every time we are restarting the server if there are any modifications.
 -> Installing nodemon and which continuously watches over the changes and restarts the server.
 
+1. install nodemon using the command: "npm i -D nodemon"
+
+2.1 change the start script to "start": "nodemon `filename.js`"
+-> ex: "start": "nodemon server.js"
+-> use command "npm start" --- to start server
+2.2 or else --- add another script inside "package.json" that is... "dev": "nodemon server.js"
+-> for this use command "npm run dev" --- to start server
+
+3. For cleaning up the Routes...
+-> create a separate folder "routes" this is gonna be a ideas-route folder
+-> create a file "ideas.js"
+-> import express and router from express.
+-> bring in all the routes and ideas object that were created in main "server.js"
+    (change the "app.get" to "router.get")
+    (change the routes too... because we are linking the ideas.js file to "api/ideas")
+-> bring the routes/ideas.js into server.js
+-> create middlewares in "server.js" which access the routes from "ideas.js".
+    (which are used... when we want to go to (/api/ideas)... look into the routes folder(routes/ideas) that was imported)
+
+
+--------------------------------- PART-03 -> POST requests ---------------------------------
+intro:
+-----
+-> add an idea by hitting a specific endpoint.
+/*
+  -------------------------- REST structure of EndPoints --------------------------
+  * GET- get all ideas- (/api/ideas)
+  * GET- get an idea- GET req to an id of an idea- (/api/ideas/:id)
+  * POST- Create an idea- POST req to (/api/ideas)
+  * DELETE- Delete an idea- DELETE req to (/api/ideas/:id)
+  * PUT- Update an idea- PUT req to (/api/ideas/:id)
+*/
+-> hit the endpoint (/api/ideas)
+
+1. we have to add an idea... means we have to send the data.
+2. we do that with an HTTP request is through the body.
+3. in order to do that we have to add a middleware.
+----------------------------------------------------- MIDDLEWARE -----------------------------------------------------
+4. MIDDLEWARE: something that happens between the request and response.
+----------------------------------------------------------------------------------------------------------------------
+5. we can send data either by form data or raw JSON.
+6. after initializer that is (const app = express()) in server.js file...
+ -> Initialize a body parser middleware... (_app.use(express.json())_) -> allows us t send the raw json to server
+ -> app.use(express.urlencoded({ extended: false }))
+NOTE:
+1. (These above middlewares are commonly used in all our APIs)
+2. this allows us to do by adding this middleware on the request object.
