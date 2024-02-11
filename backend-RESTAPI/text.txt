@@ -1,6 +1,6 @@
--------------------- Backend -> REST API --------------------
+----------------------------------------------------- Backend -> REST API -----------------------------------------------------
 
---------------------------------- PART-01 ---------------------------------
+----------------------------------------------------- PART-01 -----------------------------------------------------
 1. Here we are just creating the Backend-API
     -> Which are routes that we can make HTTP requests to get ideas
     -> in addition to get we can create, read, update and delete ideas
@@ -21,7 +21,7 @@ Steps to be followed:
     --- open the terminal and run the command... "npm start".
     --- use postman to make "GET"- request.
 
---------------------------------- PART-02 -> nodemon & route-cleanup ---------------------------------
+----------------------------------------------------- PART-02 -> nodemon & route-cleanup -----------------------------------------------------
 intro:
 ------
 -> every time we are restarting the server if there are any modifications.
@@ -47,12 +47,12 @@ intro:
     (which are used... when we want to go to (/api/ideas)... look into the routes folder(routes/ideas) that was imported)
 
 
---------------------------------- PART-03 -> POST requests ---------------------------------
+----------------------------------------------------- PART-03 -> POST requests -----------------------------------------------------
 intro:
 -----
 -> add an idea by hitting a specific endpoint.
 /*
-  -------------------------- REST structure of EndPoints --------------------------
+  ----------------------------------------------------- REST structure of EndPoints -----------------------------------------------------
   * GET- get all ideas- (/api/ideas)
   * GET- get an idea- GET req to an id of an idea- (/api/ideas/:id)
   * POST- Create an idea- POST req to (/api/ideas)
@@ -65,12 +65,90 @@ intro:
 2. we do that with an HTTP request is through the body.
 3. in order to do that we have to add a middleware.
 ----------------------------------------------------- MIDDLEWARE -----------------------------------------------------
-4. MIDDLEWARE: something that happens between the request and response.
+4. MIDDLEWARE:
+-> something that happens between the request and response.
+-> acts as a bridge between different parts of a system
+-> It intercepts incoming requests and outgoing responses,
+    enabling you to perform tasks such as logging, authentication, error handling, and data transformation.
 ----------------------------------------------------------------------------------------------------------------------
 5. we can send data either by form data or raw JSON.
 6. after initializer that is (const app = express()) in server.js file...
- -> Initialize a body parser middleware... (_app.use(express.json())_) -> allows us t send the raw json to server
+ -> Initialize a body parser middleware... ("app.use(express.json())") -> allows us to send the raw json to server
  -> app.use(express.urlencoded({ extended: false }))
+
 NOTE:
-1. (These above middlewares are commonly used in all our APIs)
-2. this allows us to do by adding this middleware on the request object.
+* These above middlewares are commonly used in all our APIs.
+* this allows us to do by adding this middleware on the request object.
+
+7. with this middleware we get the request and we can access the body with (request.body.<any-field>)
+    ex: request.body.id (access the id from an object)
+8. the format of an idea object is...
+{
+    id: "", ---> (when we use a DB the Id for every POST request will be automatically generated)
+    text: "",
+    tag: "",
+    username: "",
+    date: new Date()
+}
+const idea = {
+    id: ideas.length + 1,
+    text: req.body.text,
+    tag: req.body.tag,
+    username: req.body.username,
+    date: new Date().toISOString().slice(0, 10)
+}
+
+Note:
+-> In the post request, the data was sticked to an array in the memory.
+-> if we reload the server we will lose the added object
+
+
+----------------------------------------------------- PART-04 -> PUT- to Update & DELETE- to delete -----------------------------------------------------
+intro:
+-----
+-> PUT request on single object (/api/ideas/:id)- two fields that user can update are "tag" and "text"
+1. idea.text = req.body.text || idea.text;
+2. idea.tag = req.body.tag || idea.tag;
+
+-> DELETE req is also on single object (/api/ideas/:id)
+1. find the id with params.
+2. find the index from the ideas array (indexOf() method).
+3. use splice method to remove the idea from ideas.
+
+Note:
+-> Now we have full Rest API for create, update, read and delete the ideas
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- MONGODB -----------------------------------------------------
+-> open mongodb atlas
+-> create a new project -> create a database -> select Free cluster (M0) that is Cluster0
+-> change USERNAME & PWD -> remove the previous IP address and enter 0.0.0.0 and click on "add entry" -> Finish and close
+-> click on "connect" -> select drivers and follow the instructions or copy the "connection string"
+-> store the string into create a ".env" file (to store environment variables) -> "mainFolder/.env"
+-> on env file create a variable called "MONGO_URI" and assign to the copied string
+--- the string has to be modified at <password>: enter your password created on mongodb/atlas website
+--- right before the "?" mark enter the database name.
+
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+----------------------------------------------------- Mongoose Connect & DotEnv -----------------------------------------------------
+intro- MONGOOSE:
+---------------
+-> we are going to use a tool called "MONGOOSE" to connect to MONGODB through our application.
+-> Mongoose: Object Data Mapper (ODM)
+-> it is a package an we can install with NPM
+ --- connect to our database using mongoose.connect()
+ --- we create a model for all of our resources.
+
+into- (.env):
+------------
+-> this package allows us to use ".env" file.
+-> we can access our variables created in the .env file with process.env.<variable_name>
+    --- example: process.env.MONGO_URI
+-> 
+
+steps to be followed...
+-----------------------
+1. "npm i dotenv mongoose"
+    --- to install "dotenv" and "mongoose" packages
+2. add ".env" into ".gitignore" file.
+    --- inside ".env" add "PORT" variable and store 8000(temporarily) but actual PORT number would be 5000.

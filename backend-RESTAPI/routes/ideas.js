@@ -42,11 +42,6 @@ router.get("/",(req, res)=> {
   res.json({ success: true, data: ideas});
 });
 
-// POST Request to add an Idea
-router.post('/', (req, res)=> {
-  res.send("POST SUCCESS")
-})
-
 /*
 -------------------------- GET req- to get a single idea with its' Id
 - to get an idea with its' Id we use "Query Param"-> /:id (id === id of that idea)
@@ -71,5 +66,51 @@ router.get("/:id",(req, res)=> {
   res.json({ success: true, data: idea});
 });
 
+// POST Request to add an Idea
+router.post('/', (req, res)=> {
+  const idea = {
+    id: ideas.length + 1,
+    text: req.body.text,
+    tag: req.body.tag,
+    username: req.body.username,
+    date: new Date().toISOString().slice(0, 10)
+  }
+  ideas.push(idea);
+
+  res.json({ success: true, data: idea })
+})
+
+router.put('/:id', (req, res)=> {
+  const idea = ideas.find((idea)=> {
+    return (idea.id === +req.params.id)
+  })
+
+  // error handler
+  if(!idea){
+    return res.status(404).json({ success: true, error: "Data not found" })
+  }
+
+  idea.text = req.body.text || idea.text;
+  idea.tag = req.body.tag || idea.tag;
+
+  res.json({ success: true, data: idea })
+})
+
+// DELETE an Idea
+router.delete('/:id', (req, res)=> {
+  const idea = ideas.find((idea)=> {
+    return (idea.id === +req.params.id)
+  })
+
+  // error handler
+  if(!idea){
+    return res.status(404).json({ success: true, error: "Data not found" })
+  }
+
+  const index = ideas.indexOf(idea);
+  ideas.splice(index, 1)
+
+  res.json({ success: true, data: {} });
+})
 
 module.exports = router;

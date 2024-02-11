@@ -8,6 +8,10 @@ const PORT = 5000;
 // -> which is an object and has all kinds of methods on it.
 const app = express();
 
+// Middleware for POST request
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
 // to create routes, we use "get", "post", "update", "delete" etc.
 // GET request takes "req" and "res" objects as arguments
 app.get('/', (req, res)=> {
