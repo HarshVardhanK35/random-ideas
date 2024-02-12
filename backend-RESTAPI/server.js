@@ -1,12 +1,21 @@
 // -------------------------- import express
 const express = require("express");
+require("dotenv").config();
 
-// create a port
-const PORT = 5000;
+// bring the function "connectDB" from <config/db.js>
+const connectDB = require("./config/db");
+
+// connect to database by running function...
+connectDB()
+
+
+// create a port... initially and after .env use process.env
+const PORT = process.env.PORT || 5000;
 
 // create a variable "app" and set to "express()"
 // -> which is an object and has all kinds of methods on it.
 const app = express();
+
 
 // Middleware for POST request
 app.use(express.json());
