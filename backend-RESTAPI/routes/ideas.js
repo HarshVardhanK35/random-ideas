@@ -1,5 +1,12 @@
 const express = require("express");
-const router = express.Router()
+const router = express.Router();
+
+// Import the schema from the models folder
+const Idea = require("../models/Idea");
+
+//
+
+
 
 // bring all the routes and the ideas object from server.js
 
@@ -37,9 +44,9 @@ const ideas = [
   * PUT- Update an idea- PUT req to (/api/ideas/:id)
 */
 
-// GET req to get all the ideas
-router.get("/",(req, res)=> {
-  res.json({ success: true, data: ideas});
+// GET req --- get all the ideas
+router.get("/", async(req, res)=> {
+  
 });
 
 /*
