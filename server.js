@@ -1,5 +1,6 @@
 // -------------------------- import express
 const express = require("express");
+const path = require("path");
 require("dotenv").config();
 
 // bring the function "connectDB" from <config/db.js>
@@ -16,8 +17,10 @@ const PORT = process.env.PORT || 5000;
 // -> which is an object and has all kinds of methods on it.
 const app = express();
 
+// Static folder
+app.use(express.static(path.join(__dirname, "public")))
 
-// Middleware for POST request
+// body-parser-middleware --- Middleware for POST request
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
