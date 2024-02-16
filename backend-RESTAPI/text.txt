@@ -60,6 +60,30 @@ intro:
   * PUT- Update an idea- PUT req to (/api/ideas/:id)
 */
 -> hit the endpoint (/api/ideas)
+-> GET req- to get a single idea with its' Id
+-> to get an idea with its' Id we use "Query Param"-> /:id (id === id of that idea)
+-> way to access it is: with request object-> (req.params) and the param we need-> (id) with (req.params.id)
+-> to filter an idea by Id
+    -> we do manually here using... HigherOrderArray Methods.
+    -> usually, we use findById() when we use tools like Mongoose.
+____________________________________________________________________________________
+get an idea with unique id (using hard-coded data):
+---------------------------------------------------
+router.get("/:id",(req, res)=> {
+
+  const idea = ideas.find((idea)=> {
+    return idea.id === +req.params.id
+  })
+
+  // -------------------------- handling the error
+  // we need to take care of... to handle error if there is no idea with that Id
+  if(!idea){
+    return res.status(404).json({ success: false, error: "Data not found" })
+  }
+
+  res.json({ success: true, data: idea});
+});
+____________________________________________________________________________________
 
 1. we have to add an idea... means we have to send the data.
 2. we do that with an HTTP request is through the body.
@@ -109,14 +133,47 @@ intro:
 -> PUT request on single object (/api/ideas/:id)- two fields that user can update are "tag" and "text"
 1. idea.text = req.body.text || idea.text;
 2. idea.tag = req.body.tag || idea.tag;
+____________________________________________________________________________________
+below is the code for put request with hard-coded data:
+-------------------------------------------------------
+router.put('/:id', (req, res)=> {
+  const idea = ideas.find((idea)=> {
+    return (idea.id === +req.params.id)
+  })
+  // error handler
+  if(!idea){
+    return res.status(404).json({ success: true, error: "Data not found" })
+  }
+  idea.text = req.body.text || idea.text;
+  idea.tag = req.body.tag || idea.tag;
 
+  res.json({ success: true, data: idea })
+})
+____________________________________________________________________________________
 -> DELETE req is also on single object (/api/ideas/:id)
 1. find the id with params.
 2. find the index from the ideas array (indexOf() method).
 3. use splice method to remove the idea from ideas.
+____________________________________________________________________________________
+below is the code for delete request with hard-coded data:
+->
+router.delete('/:id', (req, res)=> {
+  const idea = ideas.find((idea)=> {
+    return (idea.id === +req.params.id)
+  })
+  // error handler
+  if(!idea){
+    return res.status(404).json({ success: true, error: "Data not found" })
+  }
+  const index = ideas.indexOf(idea);
+  ideas.splice(index, 1)
 
+  res.json({ success: true, data: {} });
+})
+____________________________________________________________________________________
 Note:
 -> Now we have full Rest API for create, update, read and delete the ideas
+____________________________________________________________________________________
 
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------
 ----------------------------------------------------- MONGODB -----------------------------------------------------
@@ -197,4 +254,61 @@ intro:
 
 steps to be followed:
 ---------------------
-1. import the models into ideas.js route into a variable with capital letter at first "Idea" <const Idea = require('./models/Idea.js')>
+0. import the models into ideas.js (file) route (folder) into a variable with capital letter at first "Idea" <const Idea = require('./models/Idea.js')>
+
+1. get an idea:
+---------------
+-> It defines a route handler for GET requests to the /api/ideas endpoint.
+-> Inside the route handler:
+  --- It attempts to find all idea documents in the database using await Idea.find().
+  --- If the find operation is successful, it sends a JSON response with { success: true, data: ideas }, where ideas contains an array of all the idea documents retrieved from the database.
+
+2. get all the ideas:
+---------------------
+-> when we use our model (which is Idea). we use idea.find() to get all the documents from the database (which is asynchronous cause it returns a promise so we have to use async and await)
+-> below is the code...
+router.get("/", async(req, res)=> {
+  try{
+    const ideas = await Idea.find();
+    res.json({ success: true, data: ideas })
+  }
+  catch(err){
+    res.status(500).json({ success: false, err: "Something went wrong" })
+  }
+});
+
+3. post request to add an idea:
+-------------------------------
+-> It defines a route handler for POST requests to the /api/ideas endpoint.
+-> Inside the route handler:
+  --- It creates a new Idea object with the properties text, tag, and username extracted from the request body (req.body).
+  --- It attempts to save the newly created idea document to the database using await <idea.save()>
+  --- If the save operation is successful, it sends a JSON response with { success: true, data: savedIdea }, where savedIdea contains the newly created idea document.
+->
+
+4. PUT request to Update an idea:
+---------------------------------
+-> get the id with <req.params.id> and pass as an arg into the Idea.findByIdAndUpdate() -> to update an idea.
+-> If you want to update the fields "text" and "tag" of the document when using findByIdAndUpdate
+  --- you can pass an object to the "$set" operator with the new values you want to update.
+  --- We pass an object with the "$set" operator to specify which fields to update (text and tag) and their new values based on req.body.
+-> We include { new: true } as an option to return the updated document instead of the original one.
+->
+
+5. Delete request to delete an idea:
+------------------------------------
+-> It defines a route handler for DELETE requests to the /api/ideas/:id endpoint.
+-> Inside the route handler:
+  --- It uses await Idea.findByIdAndDelete(req.params.id) to find the idea document by its ID and delete it from the database.
+  --- If the deletion is successful, it sends a JSON response with { success: true, data: {} }, indicating that the operation was successful.
+->
+________________________________________________________________________________________________________________________________________________________________________
+Note:
+-----
+-> we can use "save" directly on the object instantiated from the model.
+-> we used "find" directly on the model
+-> some methods are made to be used directly on the model and some are used on the objects that are instantiated from the model
+
+________________________________________________________________________________________________________________________________________________________________________
+------------------------------------------------------------SO WE HAVE A FULL CRUD REST-API WITH A DATABASE------------------------------------------------------------
+________________________________________________________________________________________________________________________________________________________________________

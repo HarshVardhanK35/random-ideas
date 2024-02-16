@@ -4,36 +4,10 @@ const router = express.Router();
 // Import the schema from the models folder
 const Idea = require("../models/Idea");
 
-//
-
-
-
 // bring all the routes and the ideas object from server.js
 
 // ideas object created inside server.js file.. brought from server.js into this for cleaning up the routes
-const ideas = [
-  {
-    id: 1,
-    text: "Positive news letter, a newsletter that only shares positive, uplifting news",
-    tag: 'Technology',
-    username: 'TonyStark',
-    date: '22-01-2024'
-  },
-  {
-    id: 2,
-    text: "Milk cartons that turn a different color the older that your milk is getting",
-    tag: 'Inventions',
-    username: 'Steve',
-    date: '12-02-2024'
-  },
-  {
-    id: 3,
-    text: "ATM location app which lets you know where the closest ATM is (if it is only in service)",
-    tag: 'Software',
-    username: 'Bruce',
-    date: '3-02-2024'
-  },
-];
+const ideas = [];
 
 /*
   -------------------------- REST structure of EndPoints --------------------------
@@ -46,78 +20,80 @@ const ideas = [
 
 // GET req --- get all the ideas
 router.get("/", async(req, res)=> {
-  
+  try{
+    const ideas = await Idea.find();
+    res.json({ success: true, data: ideas })
+  }
+  catch(err){
+    console.log(err)
+    res.status(500).json({ success: false, err: "Something went wrong" })
+  }
 });
 
-/*
--------------------------- GET req- to get a single idea with its' Id
-- to get an idea with its' Id we use "Query Param"-> /:id (id === id of that idea)
-- way to access it is: with request object-> (req.params) and the param we need-> (id)
-  with (req.params.id)
-- to filter an idea by Id
-    -> we do manually here using... HigherOrderArray Methods.
-    -> usually, we use findById() when we use tools like Mongoose.
-*/
-router.get("/:id",(req, res)=> {
-
-  const idea = ideas.find((idea)=> {
-    return idea.id === +req.params.id
-  })
-
-  // -------------------------- handling the error
-  // we need to take care of... to handle error if there is no idea with that Id
-  if(!idea){
-    return res.status(404).json({ success: false, error: "Data not found" })
+// get an single idea using it's id
+router.get("/:id", async(req, res)=> {
+  try{
+    const idea = await Idea.findById(req.params.id)
+    res.json({ success: true, data: idea })
   }
-
-  res.json({ success: true, data: idea});
+  catch(err){
+    console.log(err);
+    res.status(500).json({ success: false, err: "Something went wrong" })
+  }
 });
 
 // POST Request to add an Idea
-router.post('/', (req, res)=> {
-  const idea = {
-    id: ideas.length + 1,
+router.post('/', async (req, res)=> {
+  const idea = new Idea({
     text: req.body.text,
     tag: req.body.tag,
     username: req.body.username,
-    date: new Date().toISOString().slice(0, 10)
-  }
-  ideas.push(idea);
-
-  res.json({ success: true, data: idea })
-})
-
-router.put('/:id', (req, res)=> {
-  const idea = ideas.find((idea)=> {
-    return (idea.id === +req.params.id)
   })
 
-  // error handler
-  if(!idea){
-    return res.status(404).json({ success: true, error: "Data not found" })
+  try{
+    // -> to save the object(idea) to the database
+    const savedIdea = await idea.save();
+    res.json({ success: true, data: savedIdea })
   }
+  catch(err){
+    console.log(err)
+    res.status(500).json({ success: false, err: "Something went wrong" })
+  }
+})
 
-  idea.text = req.body.text || idea.text;
-  idea.tag = req.body.tag || idea.tag;
-
-  res.json({ success: true, data: idea })
+// Update an Idea
+router.put('/:id', async(req, res)=> {
+  try {
+    const updatedIdea = await Idea.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          text: req.body.text,
+          tag: req.body.tag
+        }
+      },
+      {
+        new: true
+      }
+    )
+    res.json({ success: true, data: updatedIdea })
+  }
+  catch (err) {
+    console.log(err);
+    res.status(500).json({ success: false, err: "Something went wrong" })
+  }
 })
 
 // DELETE an Idea
-router.delete('/:id', (req, res)=> {
-  const idea = ideas.find((idea)=> {
-    return (idea.id === +req.params.id)
-  })
-
-  // error handler
-  if(!idea){
-    return res.status(404).json({ success: true, error: "Data not found" })
+router.delete('/:id', async(req, res)=> {
+  try{
+    await Idea.findByIdAndDelete(req.params.id);
+    res.json({ success: true, data: {} })
   }
-
-  const index = ideas.indexOf(idea);
-  ideas.splice(index, 1)
-
-  res.json({ success: true, data: {} });
+  catch(err){
+    console.log(err);
+    res.status(500).json({ success: false, err: "Something went wrong" })
+  }
 })
 
 module.exports = router;
