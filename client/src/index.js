@@ -8,3 +8,9 @@ import './css/style.css';
 // -------------------------------------- functional components
 import initModal from '../components/Modal';
 initModal();
+
+import initForm from '../components/IdeaForm';
+initForm();
+
+import initIdeas from '../components/IdeaList';
+initIdeas();

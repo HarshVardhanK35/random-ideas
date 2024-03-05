@@ -1,11 +1,10 @@
 ------------------------------------------------------------------------- Part-1: client Folder Setup -------------------------------------------------------------------------
-__________________________________________________________________________________________________________________________________________________________________________________________________________________
 1.1 EXPRESS STATIC FOLDER SETUP:
 --------------------------------
--> create a static folder with express and call it "public" which is <static> (to put HTML and CSS files in this folder).
--> add a one line of middleware in "server.js"
--> in server.js import "path" module and before body-parser-middleware add <app.use(express.static(path.join(__dirname, "public")))>.
-  --- a middleware, which is used to server static files in "public" folder
+-> create a static folder with express and call it "public"--- (to put HTML and CSS files in this folder).
+-> add a one line of middleware in "server.js" to make "public" folder a static.
+-> in server.js import "path" module and before body-parser-middleware put <app.use(express.static(path.join(__dirname, "public")))>.
+  --- a middleware, which is used to serve static files in "public" folder
   --- so files in this folder will be accessible to clients via web browser
   Note:
   -----
@@ -13,15 +12,15 @@ ________________________________________________________________________________
 -> now add a simple html code into index.html inside public folder
   --- run the command "npm run build"
   --- we can see the HTML page on 5000 server.
-  --- our apis routes also gonna work st the same time on the same server
+  --- our APIs routes also gonna work at the same time on the same server.
 -> WE HAVE CREATED INDEX.HTML TO SHOW HOW IT WORKS --- SO DELETE THE INDEX.HTML
 
 1.2 CREATE A CLIENT FOLDER:
 ---------------------------
 -> create CLIENT FOLDER-> (FRONT-END DEVELOPMENT ENVIRONMENT) -> we put webpack files here
--> previously we have created a webpack starter and we gonna copy those files (an src folder, package-lock, package, webpack-config) from there into RandomIdeas-app/client.
+-> previously we have created a WEBPACK STARTER(project) and we gonna copy those files (an src folder, package-lock, package, webpack-config) from there into RandomIdeas-app/client.
 -> now we have separate modules inside client folder and install them with "npm i"
--> when we run "npm run build" it create a dist folder and add all the files into it.
+-> when we run "npm run build" in terminal... it create a dist folder and add all the files into it.
   --- so, change the path from "dist" to "public" inside "client/webpack.config" file (at output.path and devServer.static.directory)
 -> now we can run "npm run build" inside the terminal -> so this generates new files inside public folder
 -> we have to run the client folder automatically so run "npm start" as per the scripts inside client/package
@@ -37,35 +36,54 @@ Note:
 -----
 1. in here we gonna create separate modules for every functionality that a component holds
 __________________________________________________________________________________________________________________________________________________________________________________________________________________
+
 ------------------------------------------------------------------------- Part-2: Modal Component -------------------------------------------------------------------------
-__________________________________________________________________________________________________________________________________________________________________________________________________________________
 2.1 A MODAL:
 ------------
 steps:
 ------
 -> A MODAL component has a class that has an OPEN and CLOSE methods.
 -> in CSS file on class modal (.modal) there is a style that is (display: none) -> we can see the Modal if we change that to (display: block)
--> so we have to change it block when we click on the (+) button
+-> so we have to change it block to display a modal... when we click on the (+) button
 -> to close it just click on anywhere outside the modal
 
 Note:
 -----
 1. to make the code look cleaner and organized, we have to structure it with different UI components.
 
-2.2 COMPONENTS FOLDER:
-----------------------
+2.2 COMPONENTS FOLDER --- MODAL COMPONENT:
+------------------------------------------
 -> create another folder called "components"
 -> here create class components so the convention for files is to start with capital letter
 -> create "Modal.js" and define a class "Modal" and grab the components from index.html
 -> created a class component and checkout the code inside the client/components/Modal.js
--> <this.outSideClick.bind(this)> this code explanation:
-  --- if we use this keyword inside of a class method and it is on an eventListener.
-    --- then this is going to belong to the element that the event was called on.
-  --- in that case, we have to use bind() and pass this into it.
-    --- now this belongs to the class rather than that element.
+-> <this.outSideClick.bind(this)> "this" code explanation:
+  --- if we use "this" keyword inside of a class method and it is on an eventListener.
+    --- then "this" is going to belong to the element that the event was called on.
+  --- in that case, we have to use bind() and pass "this" into it.
+    --- now "this" belongs to the class rather than that element.
 -> export from Modal.js and import it into index.js
 -> initiate a new object when it is a class component or else call the function if it is a functional component
 
 Note:
--> I HAVE CHANGED THE CODE USING "FUNCTIONS" INSTEAD OF USING "CLASSES"
+-> I HAVE CHANGED THE CODE... USED "FUNCTIONS" INSTEAD OF USING "CLASSES"
 __________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+------------------------------------------------------------------------- Part-3: IdeaForm Component -------------------------------------------------------------------------
+IdeaForm Component:
+-------------------
+1. used functions instead of classes;
+2. used dispatchEvent...
+  -> dispatchEvent: dispatches a custom event named 'closeModal' on the document object.
+3. dispatchEvent: This method is used to dispatch (trigger) an event on the specified target.
+4. new Event('closeModal'): This creates a new Event object with the event type set to 'closeModal'.
+  -> This event can be listened to and handled by event listeners attached to the document or any of its descendant elements.
+
+NOTE:
+-----
+-> we are going to create a service which is a class that interacts with API, which get the ideas to put on the page and add new ideas and so on.
+__________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+`
+    
+  `
