@@ -1,6 +1,8 @@
 // -------------------------- import express
 const express = require("express");
 const path = require("path");
+const cors = require("cors");
+
 require("dotenv").config();
 
 // bring the function "connectDB" from <config/db.js>
@@ -17,12 +19,18 @@ const PORT = process.env.PORT || 5000;
 // -> which is an object and has all kinds of methods on it.
 const app = express();
 
-// Static folder
+// Static folder to view html page...
 app.use(express.static(path.join(__dirname, "public")))
 
 // body-parser-middleware --- Middleware for POST request
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// CORS middleware
+app.use(cors({
+  origin:["http://localhost:5000", "http://localhost:3000"],
+  credentials: true
+}))
 
 // to create routes, we use "get", "post", "update", "delete" etc.
 // GET request takes "req" and "res" objects as arguments

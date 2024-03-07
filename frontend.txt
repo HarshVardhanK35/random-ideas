@@ -4,7 +4,8 @@
 -> create a static folder with express and call it "public"--- (to put HTML and CSS files in this folder).
 -> add a one line of middleware in "server.js" to make "public" folder a static.
 -> in server.js import "path" module and before body-parser-middleware put <app.use(express.static(path.join(__dirname, "public")))>.
-  --- a middleware, which is used to serve static files in "public" folder
+  --- a middleware, which is used to serve static files in "public" folder.
+  --- this public folder will be new dist folder for the front-end... so when we run <npm start> all the production files goes into here.
   --- so files in this folder will be accessible to clients via web browser
   Note:
   -----
@@ -84,6 +85,16 @@ NOTE:
 -> we are going to create a service which is a class that interacts with API, which get the ideas to put on the page and add new ideas and so on.
 __________________________________________________________________________________________________________________________________________________________________________________________________________________
 
-`
-    
-  `
+------------------------------------------------------------------------- Part-4: API Service - GET Ideas -------------------------------------------------------------------------
+CORS Error:
+CORS... Cross Origin Resource Sharing
+-----------
+1. while accessing data from "localhost:5000/api/ideas" with "localhost:3000"
+2. we got CORS error that is...
+-> we are using a different domain (3000) that front-end dev server
+-> which tries to access data from (localhost:5000)
+-> this process has been blocked by "CORS"
+
+solution:
+---------
+1. on back-end we need to enable CORS and we need to enable requests from localhost:3000 url
