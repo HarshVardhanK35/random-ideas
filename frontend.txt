@@ -45,10 +45,10 @@ ________________________________________________________________________________
 ------------
 steps:
 ------
--> A MODAL component has a class that has an OPEN and CLOSE methods.
--> in CSS file on class modal (.modal) there is a style that is (display: none) -> we can see the Modal if we change that to (display: block)
--> so we have to change it block to display a modal... when we click on the (+) button
--> to close it just click on anywhere outside the modal
+-> A MODAL component has a class that has an OPEN and CLOSE methods to open and close the Modal component.
+-> in CSS file on class modal (.modal) there is a style that is (display: none)
+-> we can open the Modal by clicking the "+" button ---> if we change that to (display: block)
+-> to close it just click on anywhere outside the modal box.
 
 Note:
 -----
