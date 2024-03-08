@@ -7,14 +7,16 @@
   --- a middleware, which is used to serve static files in "public" folder.
   --- this public folder will be new dist folder for the front-end... so when we run <npm start> all the production files goes into here.
   --- so files in this folder will be accessible to clients via web browser
-  Note:
-  -----
-  1. This middleware is commonly used to serve front-end assets like stylesheets, scripts, and images etc to clients
 -> now add a simple html code into index.html inside public folder
   --- run the command "npm run build"
   --- we can see the HTML page on 5000 server.
   --- our APIs routes also gonna work at the same time on the same server.
 -> WE HAVE CREATED INDEX.HTML TO SHOW HOW IT WORKS --- SO DELETE THE INDEX.HTML
+
+Note:
+-----
+1. This middleware is commonly used to serve front-end assets like stylesheets, scripts, and images etc to clients
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 1.2 CREATE A CLIENT FOLDER:
 ---------------------------
