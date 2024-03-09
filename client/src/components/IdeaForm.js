@@ -1,3 +1,9 @@
+import ideasApiFunctions from "../services/ideasApi";
+import ideaListFunctions from "./IdeaList";
+
+const {createIdea} = ideasApiFunctions
+const {addIdeaToList} = ideaListFunctions
+
 const formModal = document.querySelector("#form-modal");
 
 function render(){
@@ -25,7 +31,7 @@ function render(){
     ideaForm.addEventListener('submit', handleSubmit)
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
 
     const idea = {
@@ -34,6 +40,12 @@ function render(){
       username: ideaForm.elements.username.value
     }
 
+    // Add idea to server
+    const newIdea = await createIdea(idea);
+
+    // Add idea to list
+    addIdeaToList(newIdea.data.data)
+
     // clear the fields... after submitting the form
     ideaForm.text.value = "";
     ideaForm.tag.value = "";
@@ -41,8 +53,6 @@ function render(){
 
     // close the modal... after submitting the form
     document.dispatchEvent(new Event('collapseModal'))
-
-    console.log(idea);
   }
 
   addEventListeners()

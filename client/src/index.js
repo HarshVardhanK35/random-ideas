@@ -8,4 +8,5 @@ import render from './components/IdeaForm'
 render()
 
 import ideaListFunctions from './components/IdeaList'
-ideaListFunctions()
+const {renderIdeas} = ideaListFunctions;
+renderIdeas()
