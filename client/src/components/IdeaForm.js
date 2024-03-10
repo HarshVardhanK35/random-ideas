@@ -1,18 +1,23 @@
 import ideasApiFunctions from "../services/ideasApi";
 import ideaListFunctions from "./IdeaList";
 
-const {createIdea} = ideasApiFunctions
-const {addIdeaToList} = ideaListFunctions
+const { createIdea } = ideasApiFunctions;
+const { addIdeaToList } = ideaListFunctions;
 
 const formModal = document.querySelector("#form-modal");
 
-function render(){
-  formModal.innerHTML =
-  `
+function render() {
+  formModal.innerHTML = `
     <form id="idea-form">
       <div class="form-control">
         <label for="idea-text">Enter a Username</label>
-        <input type="text" name="username" id="username" />
+        <input type="text" name="username" id="username"
+          value= "${
+            localStorage.getItem("username")
+              ? localStorage.getItem("username")
+              : ""
+          }"
+        />
       </div>
       <div class="form-control">
         <label for="idea-text">What's Your Idea?</label>
@@ -24,38 +29,53 @@ function render(){
       </div>
       <button class="btn" type="submit" id="submit">Submit</button>
     </form>
-  `
+  `;
   const ideaForm = document.querySelector("#idea-form");
 
-  function addEventListeners(){
-    ideaForm.addEventListener('submit', handleSubmit)
+  function addEventListeners() {
+    ideaForm.addEventListener("submit", handleSubmit);
   }
 
   async function handleSubmit(e) {
-    e.preventDefault()
+    e.preventDefault();
 
     const idea = {
       text: ideaForm.elements.text.value,
       tag: ideaForm.elements.tag.value,
-      username: ideaForm.elements.username.value
+      username: ideaForm.elements.username.value,
+    };
+
+    // Front-end Validation
+    if (
+      !ideaForm.elements.text.value ||
+      !ideaForm.elements.tag.value ||
+      !ideaForm.elements.username.value
+    ) {
+      alert("Please enter all fields");
+      return;
     }
+
+    // save user to local storage
+    localStorage.setItem("username", ideaForm.elements.username.value);
 
     // Add idea to server
     const newIdea = await createIdea(idea);
 
     // Add idea to list
-    addIdeaToList(newIdea.data.data)
+    addIdeaToList(newIdea.data.data);
 
     // clear the fields... after submitting the form
     ideaForm.text.value = "";
     ideaForm.tag.value = "";
     ideaForm.username.value = "";
 
+    render()
+
     // close the modal... after submitting the form
-    document.dispatchEvent(new Event('collapseModal'))
+    document.dispatchEvent(new Event("collapseModal"));
   }
 
-  addEventListeners()
+  addEventListeners();
 }
 
-export default render
+export default render;
